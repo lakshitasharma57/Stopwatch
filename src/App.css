@@ -1,0 +1,90 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+#root {
+  width: 100%;
+}
+
+.todo-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.task-panel {
+  width: 40%;
+  background: #f2f2f2;
+  padding: 30px;
+}
+
+.task-panel h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  color: #333;
+}
+
+.instructions {
+  font-size: 14px;
+  color: #777;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 5px;
+  border-bottom: 1px solid #ddd;
+  font-size: 15px;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-actions input {
+  cursor: pointer;
+}
+
+.task-actions button {
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: gray;
+}
+
+.input-panel {
+  width: 60%;
+  padding: 50px;
+  background: white;
+}
+
+.input-panel h1 {
+  font-size: 55px;
+  color: #777;
+  margin-bottom: 30px;
+}
+
+.input-panel input {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  outline: none;
+}
