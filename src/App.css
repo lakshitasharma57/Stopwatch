@@ -4,278 +4,69 @@
 
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #333;
-  background: white;
-}
-
-.portal {
-  padding: 10px;
-}
-
-header {
-  background: #008080;
+  background: black;
   color: white;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 12px 20px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.main {
+.container {
+  min-height: 100vh;
   display: flex;
-  min-height: calc(100vh - 60px);
-}
-
-.left {
-  width: 40%;
-  background: #f3f3f3;
-  border-right: 1px solid #ddd;
-}
-
-.leftTop {
-  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
-  padding: 15px;
 }
 
-input,
-textarea {
-  font-family: inherit;
-  font-size: 14px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+.time {
+  font-size: 60px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  margin-bottom: 30px;
 }
 
-.leftTop input {
-  width: 65%;
+.buttons {
+  display: flex;
+  gap: 20px;
 }
 
 button {
-  background: #007bff;
-  color: white;
+  padding: 12px 30px;
   border: none;
-  padding: 10px 14px;
-  border-radius: 3px;
+  border-radius: 5px;
+  font-size: 18px;
   cursor: pointer;
+}
+
+.start {
+  background: green;
+  color: white;
+}
+
+.stop {
+  background: red;
+  color: white;
+}
+
+.buttons button:first-child {
+  background: #444;
+  color: white;
 }
 
 button:hover {
-  background: #0056b3;
+  opacity: 0.8;
 }
 
-.questionList {
-  overflow-y: auto;
+.laps {
+  list-style: none;
+  padding: 0;
+  width: 300px;
+  margin-top: 30px;
 }
 
-.questionBox {
+.laps li {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  padding: 15px;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  background: #f8f8f8;
-  cursor: pointer;
-  gap: 10px;
-}
-
-.questionBox:hover,
-.questionBox.active {
-  background: #e5e5e5;
-}
-
-.questionInfo {
-  flex: 1;
-  min-width: 0;
-}
-
-.questionBox h3 {
-  margin: 0 0 5px;
+  padding: 12px;
+  border-bottom: 1px solid #555;
   font-size: 18px;
-  overflow-wrap: break-word;
-}
-
-.questionBox p {
-  margin: 0;
-  color: #777;
-  font-size: 14px;
-  overflow-wrap: break-word;
-}
-
-.voteControls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.voteControls button,
-.detailVotes button {
-  background: transparent;
-  color: #008080;
-  padding: 3px 8px;
-  font-size: 16px;
-}
-
-.voteControls button:hover,
-.detailVotes button:hover {
-  background: #ddd;
-}
-
-.voteControls span,
-.detailVotes span {
-  font-weight: bold;
-}
-
-.deleteBtn {
-  background: transparent;
-  color: #777;
-  padding: 5px;
-}
-
-.deleteBtn:hover {
-  color: red;
-  background: transparent;
-}
-
-.noQuestions {
-  padding: 15px;
-  color: gray;
-}
-
-.right {
-  width: 60%;
-  padding: 30px;
-}
-
-.questionForm h2 {
-  margin-bottom: 5px;
-}
-
-.questionForm p {
-  font-size: 14px;
-}
-
-.questionForm input,
-.questionForm textarea {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.questionForm textarea {
-  height: 110px;
-  resize: vertical;
-}
-
-.questionForm button {
-  display: block;
-  margin-left: auto;
-}
-
-.questionDetail {
-  background: #f1f1f1;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.questionDetail h2 {
-  margin-top: 0;
-}
-
-.questionDetail p {
-  line-height: 1.6;
-  overflow-wrap: break-word;
-}
-
-.detailVotes {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.detailVotes button {
-  background: transparent;
-  color: #008080;
-  font-size: 18px;
-}
-
-.resolveBtn {
-  background: #008080;
-}
-
-.resolveBtn:hover {
-  background: #006666;
-}
-
-.responseHeading {
-  margin-top: 20px;
-}
-
-.responses {
-  margin-bottom: 25px;
-}
-
-.responseBox {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  background: #f1f1f1;
-  padding: 15px;
-  margin-bottom: 10px;
-}
-
-.responseContent {
-  flex: 1;
-  min-width: 0;
-}
-
-.responseBox h4 {
-  margin: 0 0 10px;
-}
-
-.responseBox p {
-  margin: 0;
-  line-height: 1.5;
-  overflow-wrap: break-word;
-}
-
-.responseVotes {
-  flex-shrink: 0;
-}
-
-.empty {
-  color: gray;
-}
-
-.responseForm input,
-.responseForm textarea {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.responseForm textarea {
-  height: 100px;
-  resize: vertical;
-}
-
-.responseForm button {
-  display: block;
-  margin-left: auto;
-}
-
-@media (max-width: 700px) {
-  .main {
-    flex-direction: column;
-  }
-
-  .left,
-  .right {
-    width: 100%;
-  }
 }
