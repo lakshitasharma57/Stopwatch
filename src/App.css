@@ -4,109 +4,234 @@
 
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #333;
+  background: white;
 }
 
-.app {
+.portal {
+  padding: 10px;
+}
+
+header {
+  background: #008080;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 12px 20px;
+}
+
+.main {
   display: flex;
-  min-height: 100vh;
+  min-height: calc(100vh - 60px);
 }
 
 .left {
   width: 40%;
-  background: #f1f1f1;
-  padding: 30px;
-  text-align: center;
-  overflow-y: auto;
+  background: #f3f3f3;
+  border-right: 1px solid #ddd;
 }
 
-.left h2 {
-  color: #333;
-  font-size: 32px;
-}
-
-.description {
-  color: #777;
-  font-size: 20px;
-  line-height: 1.6;
-}
-
-.taskList {
-  margin-top: 30px;
-}
-
-.task {
+.leftTop {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: white;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  text-align: left;
-  word-break: break-word;
+  padding: 15px;
 }
 
-.task span {
-  flex: 1;
+input,
+textarea {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
 }
 
-.completed {
-  text-decoration: line-through;
-  color: gray;
-}
-
-.buttons {
-  display: flex;
-  gap: 5px;
+.leftTop input {
+  width: 65%;
 }
 
 button {
-  cursor: pointer;
+  background: #007bff;
+  color: white;
   border: none;
-  background: none;
-  font-size: 17px;
+  padding: 10px 14px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.questionList {
+  overflow-y: auto;
+}
+
+.questionBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 15px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background: #f8f8f8;
+  cursor: pointer;
+  gap: 10px;
+}
+
+.questionBox:hover,
+.questionBox.active {
+  background: #e5e5e5;
+}
+
+.questionInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.questionBox h3 {
+  margin: 0 0 5px;
+  font-size: 18px;
+  overflow-wrap: break-word;
+}
+
+.questionBox p {
+  margin: 0;
+  color: #777;
+  font-size: 14px;
+  overflow-wrap: break-word;
+}
+
+.deleteBtn {
+  background: transparent;
+  color: #777;
+  padding: 5px;
+}
+
+.deleteBtn:hover {
+  color: red;
+  background: transparent;
+}
+
+.resolvedTag {
+  display: inline-block;
+  margin-top: 8px;
+  color: green;
+  font-size: 12px;
 }
 
 .right {
   width: 60%;
-  padding: 60px;
-  text-align: center;
-  background: white;
+  padding: 30px;
 }
 
-.right h1 {
-  font-size: 65px;
+.questionForm h2 {
+  margin-bottom: 5px;
+}
+
+.questionForm p {
+  font-size: 14px;
+}
+
+.questionForm input,
+.questionForm textarea {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.questionForm textarea {
+  height: 110px;
+  resize: vertical;
+}
+
+.questionForm button {
+  display: block;
+  margin-left: auto;
+}
+
+.questionDetail {
+  background: #f1f1f1;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.questionDetail h2 {
+  margin-top: 0;
+}
+
+.questionDetail p {
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+
+.resolveBtn {
+  background: #008080;
+}
+
+.resolveBtn:hover {
+  background: #006666;
+}
+
+.resolvedMessage {
+  color: green;
+  font-weight: bold;
+}
+
+.responseHeading {
+  margin-top: 20px;
+}
+
+.responses {
+  margin-bottom: 25px;
+}
+
+.responseBox {
+  background: #f1f1f1;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.responseBox h4 {
+  margin: 0 0 10px;
+}
+
+.responseBox p {
+  margin: 0;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+
+.empty {
   color: gray;
 }
 
-textarea {
+.responseForm input,
+.responseForm textarea {
+  display: block;
   width: 100%;
-  height: 80px;
-  background: #333;
-  color: white;
-  font-size: 22px;
-  padding: 20px;
-  border: none;
-  resize: none;
-  outline: none;
+  margin-bottom: 10px;
 }
 
-textarea::placeholder {
-  color: #aaa;
+.responseForm textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.responseForm button {
+  display: block;
+  margin-left: auto;
 }
 
 @media (max-width: 700px) {
-  .app {
+  .main {
     flex-direction: column;
   }
 
   .left,
   .right {
     width: 100%;
-  }
-
-  .right h1 {
-    font-size: 40px;
   }
 }

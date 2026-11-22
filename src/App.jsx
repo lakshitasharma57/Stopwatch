@@ -2,90 +2,229 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [tasks, setTasks] = useState(() => {
-    return JSON.parse(localStorage.getItem('tasks')) || []
+  const [questions, setQuestions] = useState(() => {
+    return JSON.parse(localStorage.getItem('discussionQuestions') || '[]')
   })
 
-  const [input, setInput] = useState('')
+  const [selectedId, setSelectedId] = useState(null)
+  const [title, setTitle] = useState('')
+  const [question, setQuestion] = useState('')
+  const [name, setName] = useState('')
+  const [comment, setComment] = useState('')
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks))
-  }, [tasks])
+    localStorage.setItem('discussionQuestions', JSON.stringify(questions))
+  }, [questions])
 
-  function addTask(e) {
-    if (e.key === 'Enter' && input.trim() !== '') {
-      e.preventDefault()
+  const selectedQuestion = questions.find(q => q.id === selectedId)
 
-      setTasks([
-        ...tasks,
-        { id: Date.now(), text: input.trim(), completed: false }
-      ])
+  function submitQuestion(e) {
+    e.preventDefault()
 
-      setInput('')
+    if (!title.trim() || !question.trim()) return
+
+    const newQuestion = {
+      id: Date.now(),
+      title: title.trim(),
+      question: question.trim(),
+      responses: [],
+      resolved: false
+    }
+
+    setQuestions(prev => [newQuestion, ...prev])
+    setTitle('')
+    setQuestion('')
+    setSelectedId(null)
+  }
+
+  function submitResponse(e) {
+    e.preventDefault()
+
+    if (!name.trim() || !comment.trim()) return
+
+    const newResponse = {
+      id: Date.now(),
+      name: name.trim(),
+      comment: comment.trim()
+    }
+
+    setQuestions(prev =>
+      prev.map(q =>
+        q.id === selectedId
+          ? { ...q, responses: [...q.responses, newResponse] }
+          : q
+      )
+    )
+
+    setName('')
+    setComment('')
+  }
+
+  function resolveQuestion() {
+    setQuestions(prev =>
+      prev.map(q =>
+        q.id === selectedId ? { ...q, resolved: true } : q
+      )
+    )
+  }
+
+  function deleteQuestion(id) {
+    setQuestions(prev => prev.filter(q => q.id !== id))
+
+    if (selectedId === id) {
+      setSelectedId(null)
     }
   }
 
-  function toggleTask(id) {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ))
-  }
-
-  function deleteTask(id) {
-    setTasks(tasks.filter(task => task.id !== id))
-  }
-
-  function editTask(id) {
-    const newText = prompt('Edit your task:')
-
-    if (newText && newText.trim()) {
-      setTasks(tasks.map(task =>
-        task.id === id ? { ...task, text: newText.trim() } : task
-      ))
-    }
-  }
+  const filteredQuestions = questions.filter(q =>
+    q.title.toLowerCase().includes(search.toLowerCase()) ||
+    q.question.toLowerCase().includes(search.toLowerCase())
+  )
 
   return (
-    <div className="app">
-      <div className="left">
-        <h2>TASK LIST</h2>
+    <div className="portal">
+      <header>Discussion Portal</header>
 
-        <p className="description">
-          Add tasks to your list by typing to the right and pressing enter.
-          You may then view pending tasks below.
-        </p>
+      <div className="main">
 
-        <div className="taskList">
-          {tasks.map(task => (
-            <div className="task" key={task.id}>
+        {/* LEFT PANE */}
+        <div className="left">
+          <div className="leftTop">
+            <button onClick={() => setSelectedId(null)}>
+              New Question
+            </button>
+
+            <input
+              type="text"
+              placeholder="Search questions..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
+
+          <div className="questionList">
+            {filteredQuestions.map(q => (
+              <div
+                className={`questionBox ${selectedId === q.id ? 'active' : ''}`}
+                key={q.id}
+                onClick={() => setSelectedId(q.id)}
+              >
+                <div className="questionInfo">
+                  <h3>{q.title}</h3>
+                  <p>{q.question}</p>
+
+                  {q.resolved && (
+                    <span className="resolvedTag">Resolved</span>
+                  )}
+                </div>
+
+                <button
+                  className="deleteBtn"
+                  onClick={e => {
+                    e.stopPropagation()
+                    deleteQuestion(q.id)
+                  }}
+                >
+                  ✖
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* RIGHT PANE */}
+        <div className="right">
+
+          {!selectedQuestion ? (
+
+            <form className="questionForm" onSubmit={submitQuestion}>
+              <h2>Welcome to Discussion Portal !</h2>
+              <p>Enter a subject and question to get started</p>
+
               <input
-                type="checkbox"
-                checked={task.completed}
-                onChange={() => toggleTask(task.id)}
+                type="text"
+                placeholder="Subject"
+                value={title}
+                onChange={e => setTitle(e.target.value)}
+                required
               />
 
-              <span className={task.completed ? 'completed' : ''}>
-                {task.text}
-              </span>
+              <textarea
+                placeholder="Question"
+                value={question}
+                onChange={e => setQuestion(e.target.value)}
+                required
+              />
 
-              <div className="buttons">
-                <button onClick={() => editTask(task.id)} title="Edit">✏️</button>
-                <button onClick={() => deleteTask(task.id)} title="Delete">✖</button>
+              <button type="submit">Submit</button>
+            </form>
+
+          ) : (
+
+            <div className="detailPage">
+
+              {/* QUESTION */}
+              <div className="questionDetail">
+                <h2>Question</h2>
+                <h3>{selectedQuestion.title}</h3>
+                <p>{selectedQuestion.question}</p>
+
+                {selectedQuestion.resolved ? (
+                  <span className="resolvedMessage">
+                    ✓ This question is resolved
+                  </span>
+                ) : (
+                  <button className="resolveBtn" onClick={resolveQuestion}>
+                    Resolve
+                  </button>
+                )}
               </div>
+
+              {/* RESPONSES */}
+              <h3 className="responseHeading">Responses</h3>
+
+              <div className="responses">
+                {selectedQuestion.responses.map(response => (
+                  <div className="responseBox" key={response.id}>
+                    <h4>{response.name}</h4>
+                    <p>{response.comment}</p>
+                  </div>
+                ))}
+
+                {selectedQuestion.responses.length === 0 && (
+                  <p className="empty">No responses yet.</p>
+                )}
+              </div>
+
+              {/* RESPONSE FORM */}
+              {!selectedQuestion.resolved && (
+                <form className="responseForm" onSubmit={submitResponse}>
+                  <h3>Add Response</h3>
+
+                  <input
+                    type="text"
+                    placeholder="Enter Name"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    required
+                  />
+
+                  <textarea
+                    placeholder="Enter Comment"
+                    value={comment}
+                    onChange={e => setComment(e.target.value)}
+                    required
+                  />
+
+                  <button type="submit">Submit</button>
+                </form>
+              )}
+
             </div>
-          ))}
+          )}
+
         </div>
-      </div>
-
-      <div className="right">
-        <h1>I need to...</h1>
-
-        <textarea
-          placeholder="Add a task..."
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={addTask}
-        />
       </div>
     </div>
   )
