@@ -7,60 +7,48 @@ body {
   font-family: Arial, sans-serif;
 }
 
-#root {
-  width: 100%;
-}
-
-.todo-container {
+.app {
   display: flex;
   min-height: 100vh;
-  width: 100%;
 }
 
-.task-panel {
+.left {
   width: 40%;
-  background: #f2f2f2;
+  background: #f1f1f1;
   padding: 30px;
+  text-align: center;
+  overflow-y: auto;
 }
 
-.task-panel h2 {
-  margin: 0 0 10px;
-  font-size: 24px;
+.left h2 {
   color: #333;
+  font-size: 32px;
 }
 
-.instructions {
-  font-size: 14px;
+.description {
   color: #777;
-  line-height: 1.5;
-  margin-bottom: 25px;
+  font-size: 20px;
+  line-height: 1.6;
 }
 
-.task-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 5px;
-  border-bottom: 1px solid #ddd;
-  font-size: 15px;
+.taskList {
+  margin-top: 30px;
 }
 
-.task-actions {
+.task {
   display: flex;
   align-items: center;
   gap: 10px;
+  background: white;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  text-align: left;
+  word-break: break-word;
 }
 
-.task-actions input {
-  cursor: pointer;
-}
-
-.task-actions button {
-  border: none;
-  background: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #555;
+.task span {
+  flex: 1;
 }
 
 .completed {
@@ -68,23 +56,57 @@ body {
   color: gray;
 }
 
-.input-panel {
+.buttons {
+  display: flex;
+  gap: 5px;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 17px;
+}
+
+.right {
   width: 60%;
-  padding: 50px;
+  padding: 60px;
+  text-align: center;
   background: white;
 }
 
-.input-panel h1 {
-  font-size: 55px;
-  color: #777;
-  margin-bottom: 30px;
+.right h1 {
+  font-size: 65px;
+  color: gray;
 }
 
-.input-panel input {
+textarea {
   width: 100%;
-  padding: 15px;
-  font-size: 18px;
+  height: 80px;
+  background: #333;
+  color: white;
+  font-size: 22px;
+  padding: 20px;
   border: none;
-  border-bottom: 2px solid #ccc;
+  resize: none;
   outline: none;
+}
+
+textarea::placeholder {
+  color: #aaa;
+}
+
+@media (max-width: 700px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .left,
+  .right {
+    width: 100%;
+  }
+
+  .right h1 {
+    font-size: 40px;
+  }
 }
