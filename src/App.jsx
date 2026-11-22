@@ -29,7 +29,7 @@ function App() {
       title: title.trim(),
       question: question.trim(),
       responses: [],
-      resolved: false
+      votes: 0
     }
 
     setQuestions(prev => [newQuestion, ...prev])
@@ -46,7 +46,8 @@ function App() {
     const newResponse = {
       id: Date.now(),
       name: name.trim(),
-      comment: comment.trim()
+      comment: comment.trim(),
+      votes: 0
     }
 
     setQuestions(prev =>
@@ -61,12 +62,34 @@ function App() {
     setComment('')
   }
 
-  function resolveQuestion() {
+  function voteQuestion(id, amount) {
     setQuestions(prev =>
       prev.map(q =>
-        q.id === selectedId ? { ...q, resolved: true } : q
+        q.id === id ? { ...q, votes: q.votes + amount } : q
       )
     )
+  }
+
+  function voteResponse(responseId, amount) {
+    setQuestions(prev =>
+      prev.map(q =>
+        q.id === selectedId
+          ? {
+              ...q,
+              responses: q.responses.map(r =>
+                r.id === responseId
+                  ? { ...r, votes: r.votes + amount }
+                  : r
+              )
+            }
+          : q
+      )
+    )
+  }
+
+  function resolveQuestion() {
+    setQuestions(prev => prev.filter(q => q.id !== selectedId))
+    setSelectedId(null)
   }
 
   function deleteQuestion(id) {
@@ -77,10 +100,16 @@ function App() {
     }
   }
 
-  const filteredQuestions = questions.filter(q =>
-    q.title.toLowerCase().includes(search.toLowerCase()) ||
-    q.question.toLowerCase().includes(search.toLowerCase())
-  )
+  const filteredQuestions = questions
+    .filter(q =>
+      q.title.toLowerCase().includes(search.toLowerCase()) ||
+      q.question.toLowerCase().includes(search.toLowerCase())
+    )
+    .sort((a, b) => b.votes - a.votes)
+
+  const sortedResponses = selectedQuestion
+    ? [...selectedQuestion.responses].sort((a, b) => b.votes - a.votes)
+    : []
 
   return (
     <div className="portal">
@@ -88,7 +117,6 @@ function App() {
 
       <div className="main">
 
-        {/* LEFT PANE */}
         <div className="left">
           <div className="leftTop">
             <button onClick={() => setSelectedId(null)}>
@@ -113,10 +141,28 @@ function App() {
                 <div className="questionInfo">
                   <h3>{q.title}</h3>
                   <p>{q.question}</p>
+                </div>
 
-                  {q.resolved && (
-                    <span className="resolvedTag">Resolved</span>
-                  )}
+                <div className="voteControls">
+                  <button
+                    onClick={e => {
+                      e.stopPropagation()
+                      voteQuestion(q.id, 1)
+                    }}
+                  >
+                    ▲
+                  </button>
+
+                  <span>{q.votes}</span>
+
+                  <button
+                    onClick={e => {
+                      e.stopPropagation()
+                      voteQuestion(q.id, -1)
+                    }}
+                  >
+                    ▼
+                  </button>
                 </div>
 
                 <button
@@ -130,10 +176,13 @@ function App() {
                 </button>
               </div>
             ))}
+
+            {filteredQuestions.length === 0 && (
+              <p className="noQuestions">No questions found.</p>
+            )}
           </div>
         </div>
 
-        {/* RIGHT PANE */}
         <div className="right">
 
           {!selectedQuestion ? (
@@ -164,62 +213,77 @@ function App() {
 
             <div className="detailPage">
 
-              {/* QUESTION */}
               <div className="questionDetail">
                 <h2>Question</h2>
                 <h3>{selectedQuestion.title}</h3>
                 <p>{selectedQuestion.question}</p>
 
-                {selectedQuestion.resolved ? (
-                  <span className="resolvedMessage">
-                    ✓ This question is resolved
-                  </span>
-                ) : (
-                  <button className="resolveBtn" onClick={resolveQuestion}>
-                    Resolve
+                <div className="detailVotes">
+                  <button onClick={() => voteQuestion(selectedId, 1)}>
+                    ▲
                   </button>
-                )}
+
+                  <span>{selectedQuestion.votes}</span>
+
+                  <button onClick={() => voteQuestion(selectedId, -1)}>
+                    ▼
+                  </button>
+                </div>
+
+                <button className="resolveBtn" onClick={resolveQuestion}>
+                  Resolve
+                </button>
               </div>
 
-              {/* RESPONSES */}
-              <h3 className="responseHeading">Responses</h3>
+              <h3 className="responseHeading">Previous Answers</h3>
 
               <div className="responses">
-                {selectedQuestion.responses.map(response => (
+                {sortedResponses.map(response => (
                   <div className="responseBox" key={response.id}>
-                    <h4>{response.name}</h4>
-                    <p>{response.comment}</p>
+                    <div className="responseContent">
+                      <h4>{response.name}</h4>
+                      <p>{response.comment}</p>
+                    </div>
+
+                    <div className="voteControls responseVotes">
+                      <button onClick={() => voteResponse(response.id, 1)}>
+                        ▲
+                      </button>
+
+                      <span>{response.votes}</span>
+
+                      <button onClick={() => voteResponse(response.id, -1)}>
+                        ▼
+                      </button>
+                    </div>
                   </div>
                 ))}
 
                 {selectedQuestion.responses.length === 0 && (
-                  <p className="empty">No responses yet.</p>
+                  <p className="empty">No answers yet.</p>
                 )}
               </div>
 
-              {/* RESPONSE FORM */}
-              {!selectedQuestion.resolved && (
-                <form className="responseForm" onSubmit={submitResponse}>
-                  <h3>Add Response</h3>
+              <form className="responseForm" onSubmit={submitResponse}>
+                <h3>Add Response</h3>
 
-                  <input
-                    type="text"
-                    placeholder="Enter Name"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    required
-                  />
+                <input
+                  type="text"
+                  placeholder="Enter Name"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  required
+                />
 
-                  <textarea
-                    placeholder="Enter Comment"
-                    value={comment}
-                    onChange={e => setComment(e.target.value)}
-                    required
-                  />
+                <textarea
+                  placeholder="Enter Comment"
+                  value={comment}
+                  onChange={e => setComment(e.target.value)}
+                  required
+                />
 
-                  <button type="submit">Submit</button>
-                </form>
-              )}
+                <button type="submit">Submit</button>
+              </form>
 
             </div>
           )}

@@ -104,6 +104,31 @@ button:hover {
   overflow-wrap: break-word;
 }
 
+.voteControls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.voteControls button,
+.detailVotes button {
+  background: transparent;
+  color: #008080;
+  padding: 3px 8px;
+  font-size: 16px;
+}
+
+.voteControls button:hover,
+.detailVotes button:hover {
+  background: #ddd;
+}
+
+.voteControls span,
+.detailVotes span {
+  font-weight: bold;
+}
+
 .deleteBtn {
   background: transparent;
   color: #777;
@@ -115,11 +140,9 @@ button:hover {
   background: transparent;
 }
 
-.resolvedTag {
-  display: inline-block;
-  margin-top: 8px;
-  color: green;
-  font-size: 12px;
+.noQuestions {
+  padding: 15px;
+  color: gray;
 }
 
 .right {
@@ -167,17 +190,25 @@ button:hover {
   overflow-wrap: break-word;
 }
 
+.detailVotes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.detailVotes button {
+  background: transparent;
+  color: #008080;
+  font-size: 18px;
+}
+
 .resolveBtn {
   background: #008080;
 }
 
 .resolveBtn:hover {
   background: #006666;
-}
-
-.resolvedMessage {
-  color: green;
-  font-weight: bold;
 }
 
 .responseHeading {
@@ -189,9 +220,18 @@ button:hover {
 }
 
 .responseBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
   background: #f1f1f1;
   padding: 15px;
   margin-bottom: 10px;
+}
+
+.responseContent {
+  flex: 1;
+  min-width: 0;
 }
 
 .responseBox h4 {
@@ -202,6 +242,10 @@ button:hover {
   margin: 0;
   line-height: 1.5;
   overflow-wrap: break-word;
+}
+
+.responseVotes {
+  flex-shrink: 0;
 }
 
 .empty {
